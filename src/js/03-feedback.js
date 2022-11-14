@@ -7,8 +7,9 @@ const KEY_FORM = "feedback-form-state";
 let userData = {};
 
 const fillFormElements = () => {
+
   const dataFromLocalStorage = JSON.parse(localStorage.getItem(KEY_FORM));
-  // console.log(dataFromLocalStr);
+
   for (const prop in dataFromLocalStorage) {
       
     if (dataFromLocalStorage.hasOwnProperty(prop)) {
@@ -22,12 +23,15 @@ const fillFormElements = () => {
 fillFormElements();
 
 function onInputElInput(event) {
-
+  
   const name = event.target.name;
   const value = event.target.value;
+  if (localStorage.getItem(KEY_FORM)){
+     userData = JSON.parse(localStorage.getItem(KEY_FORM))
+  }
   userData[name] = value;
-  console.log(userData);
   localStorage.setItem(KEY_FORM, JSON.stringify(userData))
+  
 }
 
 const onSubmitBtnClick = event => {
