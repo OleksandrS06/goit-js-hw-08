@@ -1,51 +1,47 @@
 import throttle from "lodash.throttle";
 
 const formEl = document.querySelector(".feedback-form")
-
-// console.log(formEl);
 const KEY_FORM = "feedback-form-state";
-let userData = {};
+// let userData = {};
+let userData = JSON.parse(localStorage.getItem(KEY_FORM)) ?? {};
+
 
 const fillFormElements = () => {
-
-  const dataFromLocalStorage = JSON.parse(localStorage.getItem(KEY_FORM));
-
-  for (const prop in dataFromLocalStorage) {
-      
-    if (dataFromLocalStorage.hasOwnProperty(prop)) {
+const dataFromLocalStorage = JSON.parse(localStorage.getItem(KEY_FORM));
+for (const prop in dataFromLocalStorage) {
+      if (dataFromLocalStorage.hasOwnProperty(prop)) {
       formEl.elements[prop].value = dataFromLocalStorage[prop];
      }
-// formEl.elements[prop].value = dataFromLocalStorage[prop];
-    
-    console.log(dataFromLocalStorage[prop]);
+  console.log(dataFromLocalStorage[prop]);
   }
 }
 fillFormElements();
 
 function onInputElInput(event) {
-  
   const name = event.target.name;
   const value = event.target.value;
-  if (localStorage.getItem(KEY_FORM)){
-     userData = JSON.parse(localStorage.getItem(KEY_FORM))
-  }
+  // if (localStorage.getItem(KEY_FORM)){
+  //    userData = JSON.parse(localStorage.getItem(KEY_FORM))
+  // }
   userData[name] = value;
   localStorage.setItem(KEY_FORM, JSON.stringify(userData))
+  }
   
+  const onSubmitBtnClick = event => {
+    event.preventDefault();
+  
+    if (formEl.elements.email.value === "" || formEl.elements.message.value === "") {
+      alert("Заповніть всі поля");
+    } else {
+      console.log(userData);
+    event.target.reset();
+    localStorage.removeItem(KEY_FORM);
+     
+    }
+    
 }
-
-const onSubmitBtnClick = event => {
-  event.preventDefault();
-  console.log(userData);
-
-  event.target.reset();
-  localStorage.removeItem(KEY_FORM);
-}
-
-
 formEl.addEventListener('input', throttle(onInputElInput, 500))
 formEl.addEventListener('submit', onSubmitBtnClick)
-
 
 
 
